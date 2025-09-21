@@ -27,14 +27,23 @@ public class FileGenerator
         this.pairsPerLength = pairsPerLength;
     }
     
-    public void GenerateFile()
+    public void GenerateFiles()
     {
         Console.WriteLine(projectDir);
 
         Directory.CreateDirectory(outputDir);
+        
+        GenerateRandomPairs();
+        GeneratePairsRandomChar();
+        
+        Console.WriteLine("All files generated successfully.");
+    }
+
+    private void GenerateRandomPairs()
+    {
         foreach (int len in lengths)
         {
-            string filePath = Path.Combine(outputDir, $"Pairs{len}.txt");
+            string filePath = Path.Combine(outputDir, $"RandomPairs{len}.txt");
             Console.WriteLine($"Generating {pairsPerLength} pairs of length {len} into {filePath}");
 
             using var writer = new StreamWriter(filePath, false, Encoding.UTF8);
@@ -46,13 +55,36 @@ public class FileGenerator
                 writer.WriteLine($"{s1} {s2}");
             }
         }
-
-        Console.WriteLine("All files generated successfully.");
     }
 
+    private void GeneratePairsRandomChar()
+    {
+        var rnd  = new Random();
+        foreach (int len in lengths)
+        {
+            if (len == 1)
+            {
+                continue;
+            }
+            
+            string filePath = Path.Combine(outputDir, $"PairsRandomChar{len}.txt");
+            Console.WriteLine($"Generating {pairsPerLength} pairs of length {len} into {filePath}");
+
+            using var writer = new StreamWriter(filePath, false, Encoding.UTF8);
+            for (int i = 0; i < pairsPerLength; ++i)
+            {
+                string s1 = RandomString(len);
+                char[] s2CharArr = s1.ToCharArray();
+
+                s2CharArr[rnd.Next(s2CharArr.Length)] = AllowedChars[rnd.Next(AllowedChars.Length)];             
+                writer.WriteLine($"{s1} {new string(s2CharArr)}");
+            }
+        }
+    }
+    
     private string RandomAsciiString(int length)
     {
-        var rnd = Random.Shared;
+        var rnd = new Random();
         var sb = new StringBuilder(length);
         for (int i = 0; i < length; ++i)
         {
@@ -64,7 +96,7 @@ public class FileGenerator
     
     private string RandomString(int length)
     {
-        var rnd = Random.Shared;
+        var rnd = new Random();
         var sb = new StringBuilder(length);
         for (int i = 0; i < length; ++i)
         {

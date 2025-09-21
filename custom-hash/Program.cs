@@ -6,7 +6,7 @@ internal class Program
     {
         Console.WriteLine("Hello, World!");
         
-        FileGenerator fileGenerator = new FileGenerator([10, 100, 500, 1000], 25000);
-        fileGenerator.GenerateFile();
+        FileGenerator fileGenerator = new FileGenerator([1, 10, 100, 500, 1000], 25000);
+        fileGenerator.GenerateFiles();
     }
 }
