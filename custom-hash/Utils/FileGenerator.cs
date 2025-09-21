@@ -36,7 +36,7 @@ public class FileGenerator
         GenerateRandomPairs();
         GeneratePairsRandomChar();
         
-        Console.WriteLine("All files generated successfully.");
+        Console.WriteLine("[ OK ] All files generated successfully.");
     }
 
     private void GenerateRandomPairs()
@@ -47,11 +47,11 @@ public class FileGenerator
             
             if (File.Exists(filePath))
             {
-                Console.WriteLine($"[Skip] {filePath} already exists.");
+                Console.WriteLine($"[SKIP] {filePath} already exists.");
                 continue;
             }
             
-            Console.WriteLine($"Generating {pairsPerLength} pairs of length {len} into {filePath}");
+            Console.WriteLine($"[INFO] Generating {pairsPerLength} pairs of length {len} into {filePath}");
 
             using var writer = new StreamWriter(filePath, false, Encoding.UTF8);
 
@@ -78,11 +78,11 @@ public class FileGenerator
             
             if (File.Exists(filePath))
             {
-                Console.WriteLine($"[Skip] {filePath} already exists.");
+                Console.WriteLine($"[SKIP] {filePath} already exists.");
                 continue;
             }
             
-            Console.WriteLine($"Generating {pairsPerLength} pairs of length {len} into {filePath}");
+            Console.WriteLine($"[INFO] Generating {pairsPerLength} pairs of length {len} into {filePath}");
 
             using var writer = new StreamWriter(filePath, false, Encoding.UTF8);
             for (int i = 0; i < pairsPerLength; ++i)

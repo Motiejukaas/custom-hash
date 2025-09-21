@@ -17,6 +17,7 @@ internal class Program
                 
                 Test test = new Test();
                 test.RunTests();
+                return;
             }
             
             
