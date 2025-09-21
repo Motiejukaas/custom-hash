@@ -5,7 +5,7 @@ namespace custom_hash.Tests;
 
 public class Test
 {
-    void RunTests()
+    public void RunTests()
     {
         Hash.Hash hash = new Hash.Hash();
         Converter converter = new Converter();
