@@ -13,4 +13,18 @@ public class Comparer
         }
         return diff;
     }
+    
+    public int HexDifference(string hex1, string hex2)
+    {
+        if (hex1.Length != hex2.Length)
+            throw new ArgumentException("Hex strings must have the same length.");
+
+        int diff = 0;
+        for (int i = 0; i < hex1.Length; i++)
+        {
+            if (hex1[i] != hex2[i])
+                diff++;
+        }
+        return diff;
+    }
 }
