@@ -8,11 +8,14 @@ internal class Program
 {
     public static void Main(string[] args)
     {
+        int[] lengths = [1, 10, 100, 500, 1000];
+        int pairsPerLength = 25000;
+        
         try
         {
             if (args.Length > 0 && args[0] == "--test")
             {
-                FileGenerator fileGenerator = new FileGenerator([1, 10, 100, 500, 1000], 25000);
+                FileGenerator fileGenerator = new FileGenerator(lengths, pairsPerLength);
                 fileGenerator.GenerateFiles();
                 
                 Test test = new Test();
@@ -31,13 +34,13 @@ internal class Program
                 {
                     // Read file as bytes
                     inputBytes = File.ReadAllBytes(firstArg);
-                    Console.WriteLine($"[Info] Read file: {firstArg} ({inputBytes.Length} bytes)");
+                    Console.WriteLine($"[INFO] Read file: {firstArg} ({inputBytes.Length} bytes)");
                 }
                 else
                 {
                     // Treat the arg as direct input text
                     inputString = firstArg;
-                    Console.WriteLine("[Info] Using command-line string input.");
+                    Console.WriteLine("[INFO] Using command-line string input.");
                 }
             }
             else
@@ -64,7 +67,7 @@ internal class Program
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Error: {ex.Message}");
+            Console.Error.WriteLine($"[ERROR]: {ex.Message}");
         }
     }
 }
