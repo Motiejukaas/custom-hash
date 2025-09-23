@@ -126,37 +126,30 @@ public class Test
         }
 
         string[] lines = File.ReadAllLines(InputConstitutionDir, Encoding.UTF8);
-        List<(int lines, long avgTimeMs)> speedResults = [];
+        List<(int lines, double avgTimeUs)> speedResults = new();
         
         var sw = Stopwatch.StartNew();
         for (int i = 1; i < lines.Length; i *= 2)
         {
-            sw.Restart();
-            for (int j = 0; j < i; ++j)
-            {
-                ComputeHash(Encoding.UTF8.GetBytes(lines[j]));
-            }
-            sw.Stop();
-            var time1 = sw.ElapsedMilliseconds;
+            // Concatenate first i lines into one string
+            string combined = string.Join('\n', lines.Take(i));
+            byte[] input = Encoding.UTF8.GetBytes(combined);
             
-            sw.Restart();
-            for (int j = 0; j < i; ++j)
+            int repeats = 3;    // repeat runs for averaging
+            double totalUs = 0;
+
+            for (int r = 0; r < repeats; r++)
             {
-                ComputeHash(Encoding.UTF8.GetBytes(lines[j]));
+                sw.Restart();
+                ComputeHash(input); // hash the whole block at once
+                sw.Stop();
+                
+                double elapsedUs = (double)sw.ElapsedTicks / Stopwatch.Frequency * 1_000_000;
+                totalUs += elapsedUs;
             }
-            sw.Stop();
-            var time2 = sw.ElapsedMilliseconds;
             
-            sw.Restart();
-            for (int j = 0; j < i; ++j)
-            {
-                ComputeHash(Encoding.UTF8.GetBytes(lines[j]));
-            }
-            sw.Stop();
-            var time3 = sw.ElapsedMilliseconds;
-            
-            var avgTimeMs = (time1 + time2 + time3) / 3;
-            speedResults.Add((i, avgTimeMs));
+            double avgTimeUs = totalUs / repeats;
+            speedResults.Add((i, avgTimeUs));
         }
         
         var outputPath = WriteToCsv(speedResults);
@@ -251,17 +244,16 @@ public class Test
         return (minBitPct, maxBitPct, avgBitPct, minHexPct, maxHexPct, avgHexPct);
     }
 
-    private string WriteToCsv(List<(int lines, long avgTimeMs)> speedResults)
+    private string WriteToCsv(List<(int lines, double avgTimeUs)> speedResults)
     {
         Directory.CreateDirectory(OutputDir);
         string csvPath = Path.Combine(OutputDir, "HashSpeed.csv");
         using var writer = new StreamWriter(csvPath, false);
-        writer.WriteLine("Lines;AvgTimeMs"); // header
+        writer.WriteLine("Lines;AvgTime_μs"); // header
         foreach (var result in speedResults)
         {
-            writer.WriteLine($"{result.lines};{result.avgTimeMs}");
+            writer.WriteLine($"{result.lines};{result.avgTimeUs:F3}");
         }
-
         return csvPath;
     }
 }
