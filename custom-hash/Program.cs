@@ -32,12 +32,14 @@ internal class Program
                 _ => throw new ArgumentException($"Unknown algorithm: {algoName}")
             };
             
+            int hashLengthBytes = hashFunc(Array.Empty<byte>()).Length;
+            
             if (args is [_, "--test", ..])
             {
                 FileGenerator fileGenerator = new FileGenerator(lengths, pairsPerLength);
                 fileGenerator.GenerateFiles();
                 
-                var test = new Test(hashFunc);
+                var test = new Test(hashFunc, hashLengthBytes);
                 test.RunTests();
 
                 return;

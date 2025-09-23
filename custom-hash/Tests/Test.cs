@@ -6,35 +6,33 @@ namespace custom_hash.Tests;
 
 public class Test
 {
-
-    private readonly Hash.Hash hash = new Hash.Hash();
     private readonly Comparer comparer = new Comparer();
     private readonly Converter converter = new Converter();
     
-    //TODO incorrect for md5
-    private const int HashLengthBit = 256;
-    private const int HashLengthHex = 64;
-    private const int HashLengthByte = 32;
-    
-    private static readonly string exeDir = AppContext.BaseDirectory;
-    private static readonly string projectDir = Directory.GetParent(exeDir)
+    private static readonly string ExeDir = AppContext.BaseDirectory;
+    private static readonly string ProjectDir = Directory.GetParent(ExeDir)
         .Parent
         .Parent
         .Parent
         .FullName;
-    private static readonly string InputPairsDir = Path.Combine(projectDir, "Data", "RandomPairs");
-    private static readonly string InputConstitutionDir = Path.Combine(projectDir, "Data", "konstitucija.txt");
-    private static readonly string OutputDir = Path.Combine(projectDir, "Data", "Output");
+    private static readonly string InputPairsDir = Path.Combine(ProjectDir, "Data", "RandomPairs");
+    private static readonly string InputConstitutionDir = Path.Combine(ProjectDir, "Data", "konstitucija.txt");
+    private static readonly string OutputDir = Path.Combine(ProjectDir, "Data", "Output");
     
     private readonly Func<byte[], byte[]> hashFunc;
-
-    public Test(Func<byte[], byte[]> hashFunc)
-    {
-        this.hashFunc = hashFunc;
-    }
+    private readonly int hashLengthBytes;
+    
+    private int HashLengthBits => hashLengthBytes * 8;
+    private int HashLengthHexes => hashLengthBytes * 2;
 
     private byte[] ComputeHash(byte[] input) => hashFunc(input);
-    
+
+    public Test(Func<byte[], byte[]> hashFunc, int hashLengthBytes)
+    {
+        this.hashFunc = hashFunc;
+        this.hashLengthBytes = hashLengthBytes;
+    }
+
     public void RunTests()
     {
         Console.WriteLine("=== Hash Algorithm Test Suite ===");
@@ -52,7 +50,7 @@ public class Test
         
         // 4. Collision
         double collisionAccuracy = CollisionTest();
-        Console.WriteLine($"[INFO] Collision accuracy: {determinismAccuracy}% ");
+        Console.WriteLine($"[INFO] Collision accuracy: {collisionAccuracy}% ");
         
         // 5. Avalanche effect
         var avalancheResults = AvalancheTest();
@@ -62,14 +60,14 @@ public class Test
         
         Console.WriteLine("=== End of Tests ===");
     }
-    
+
     private double FixedLengthTest()
     {
         int correct = 0, testCount = 0;
         
         //empty test
         byte[] hEmpty = ComputeHash(Array.Empty<byte>());
-        if (hEmpty.Length == HashLengthByte)
+        if (hEmpty.Length == hashLengthBytes)
         {
             correct++;
         }
@@ -83,7 +81,7 @@ public class Test
                 foreach (var s in pairs)
                 {
                     byte[] h = ComputeHash(Encoding.UTF8.GetBytes(s));
-                    if (h.Length == HashLengthByte) correct++;
+                    if (h.Length == hashLengthBytes) correct++;
                     testCount++;
                 }
             }
@@ -238,17 +236,17 @@ public class Test
                 lineCount++;
             }
         }
-        Console.WriteLine(lineCount);
+
         if (lineCount == 0) return (0, 0, 0, 0, 0, 0);
 
         // Convert to percentages
-        double minBitPct = minDiffBit / (double)HashLengthBit * 100;
-        double maxBitPct = maxDiffBit / (double)HashLengthBit * 100;
-        double avgBitPct = sumDiffBit / (double)(lineCount * HashLengthBit) * 100;
+        double minBitPct = minDiffBit / (double)HashLengthBits * 100;
+        double maxBitPct = maxDiffBit / (double)HashLengthBits * 100;
+        double avgBitPct = sumDiffBit / (double)(lineCount * HashLengthBits) * 100;
 
-        double minHexPct = minDiffHex / (double)HashLengthHex * 100;
-        double maxHexPct = maxDiffHex / (double)HashLengthHex * 100;
-        double avgHexPct = sumDiffHex / (double)(lineCount * HashLengthHex) * 100;
+        double minHexPct = minDiffHex / (double)HashLengthHexes * 100;
+        double maxHexPct = maxDiffHex / (double)HashLengthHexes * 100;
+        double avgHexPct = sumDiffHex / (double)(lineCount * HashLengthHexes) * 100;
 
         return (minBitPct, maxBitPct, avgBitPct, minHexPct, maxHexPct, avgHexPct);
     }
