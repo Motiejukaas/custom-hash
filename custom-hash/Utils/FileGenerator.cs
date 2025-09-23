@@ -59,6 +59,11 @@ public class FileGenerator
             {
                 string s1 = RandomString(len);
                 string s2 = RandomString(len);
+                while (s1.Equals(s2))
+                {
+                    s1 = RandomString(len);
+                    s2 = RandomString(len);
+                }
                 writer.WriteLine($"{s1} {s2}");
             }
         }
@@ -89,8 +94,13 @@ public class FileGenerator
             {
                 string s1 = RandomString(len);
                 char[] s2CharArr = s1.ToCharArray();
-
-                s2CharArr[rnd.Next(s2CharArr.Length)] = AllowedChars[rnd.Next(AllowedChars.Length)];             
+                s2CharArr[rnd.Next(s2CharArr.Length)] = AllowedChars[rnd.Next(AllowedChars.Length)];
+                
+                while (CharArrayEqualsString(s2CharArr, s1))
+                {
+                    s2CharArr = s1.ToCharArray();
+                    s2CharArr[rnd.Next(s2CharArr.Length)] = AllowedChars[rnd.Next(AllowedChars.Length)];
+                }
                 writer.WriteLine($"{s1} {new string(s2CharArr)}");
             }
         }
@@ -119,4 +129,22 @@ public class FileGenerator
 
         return sb.ToString();
     }
+    
+    private bool CharArrayEqualsString(char[] arr, string str)
+    {
+        if (arr.Length != str.Length)
+        {
+            return false;
+        }
+        for (int i = 0; i < arr.Length; ++i)
+        {
+            if (arr[i] != str[i])
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
 }

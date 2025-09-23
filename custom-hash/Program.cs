@@ -10,36 +10,52 @@ internal class Program
     {
         int[] lengths = [1, 10, 100, 500, 1000];
         int pairsPerLength = 25000;
-        
+
         try
         {
-            if (args.Length > 0 && args[0] == "--test")
+            string? inputString = null;
+            byte[]? inputBytes = null;
+            
+            if (args.Length == 0)
+            {
+                throw new ArgumentException("Please provide the hash name!");
+            }
+            
+            string algoName = args[0].ToLower();
+
+            Func<byte[], byte[]> hashFunc = algoName switch
+            {
+                "hashv01" => new Hash.Hash().HashV01,
+                "hashv02" => new Hash.Hash().HashV02,
+                "sha256" => System.Security.Cryptography.SHA256.Create().ComputeHash,
+                "md5" => System.Security.Cryptography.MD5.Create().ComputeHash,
+                _ => throw new ArgumentException($"Unknown algorithm: {algoName}")
+            };
+            
+            if (args is [_, "--test", ..])
             {
                 FileGenerator fileGenerator = new FileGenerator(lengths, pairsPerLength);
                 fileGenerator.GenerateFiles();
                 
-                Test test = new Test();
+                var test = new Test(hashFunc);
                 test.RunTests();
+
                 return;
             }
-            
-            
-            string? inputString = null;
-            byte[]? inputBytes = null;
 
-            if (args.Length > 0)
+            if (args.Length >= 2)
             {
-                string firstArg = args[0];
-                if (File.Exists(firstArg))
+                string secondArg = args[1];
+                if (File.Exists(secondArg))
                 {
                     // Read file as bytes
-                    inputBytes = File.ReadAllBytes(firstArg);
-                    Console.WriteLine($"[INFO] Read file: {firstArg} ({inputBytes.Length} bytes)");
+                    inputBytes = File.ReadAllBytes(secondArg);
+                    Console.WriteLine($"[INFO] Read file: {secondArg} ({inputBytes.Length} bytes)");
                 }
                 else
                 {
                     // Treat the arg as direct input text
-                    inputString = firstArg;
+                    inputString = secondArg;
                     Console.WriteLine("[INFO] Using command-line string input.");
                 }
             }
@@ -55,12 +71,10 @@ internal class Program
                 inputBytes = Encoding.UTF8.GetBytes(inputString);
             }
 
-            // compute hash
-            //byte[] hash = Hash1(inputBytes);
-            Console.WriteLine(inputBytes);
+            Console.WriteLine(Encoding.UTF8.GetString(inputBytes));
             Converter converter = new Converter();
-            
-            string hex = converter.BytesToHex(inputBytes);
+
+            string hex = converter.BytesToHex(hashFunc(inputBytes));
             Console.WriteLine();
             Console.WriteLine("Hash1 (256-bit, 64 hex chars):");
             Console.WriteLine(hex);

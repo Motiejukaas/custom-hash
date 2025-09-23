@@ -11,6 +11,7 @@ public class Test
     private readonly Comparer comparer = new Comparer();
     private readonly Converter converter = new Converter();
     
+    //TODO incorrect for md5
     private const int HashLengthBit = 256;
     private const int HashLengthHex = 64;
     private const int HashLengthByte = 32;
@@ -24,6 +25,15 @@ public class Test
     private static readonly string InputPairsDir = Path.Combine(projectDir, "Data", "RandomPairs");
     private static readonly string InputConstitutionDir = Path.Combine(projectDir, "Data", "konstitucija.txt");
     private static readonly string OutputDir = Path.Combine(projectDir, "Data", "Output");
+    
+    private readonly Func<byte[], byte[]> hashFunc;
+
+    public Test(Func<byte[], byte[]> hashFunc)
+    {
+        this.hashFunc = hashFunc;
+    }
+
+    private byte[] ComputeHash(byte[] input) => hashFunc(input);
     
     public void RunTests()
     {
@@ -58,13 +68,12 @@ public class Test
         int correct = 0, testCount = 0;
         
         //empty test
-        byte[] hEmpty = hash.HashV01(Array.Empty<byte>());
+        byte[] hEmpty = ComputeHash(Array.Empty<byte>());
         if (hEmpty.Length == HashLengthByte)
         {
             correct++;
         }
         testCount++;
-        //Console.WriteLine($"Empty input length: {hEmpty.Length} hex chars (should be 64)");
         
         foreach (var file in Directory.GetFiles(InputPairsDir, "RandomPairs*.txt"))
         {
@@ -73,7 +82,7 @@ public class Test
                 var pairs = line.Split(' ', 2);
                 foreach (var s in pairs)
                 {
-                    byte[] h = hash.HashV01(Encoding.UTF8.GetBytes(s));
+                    byte[] h = ComputeHash(Encoding.UTF8.GetBytes(s));
                     if (h.Length == HashLengthByte) correct++;
                     testCount++;
                 }
@@ -95,8 +104,8 @@ public class Test
                 foreach (var s in parts)
                 {
                     var input = Encoding.UTF8.GetBytes(s);
-                    var h1 = hash.HashV01(input);
-                    var h2 = hash.HashV01(input);
+                    var h1 = ComputeHash(input);
+                    var h2 = ComputeHash(input);
 
                     if (h1.SequenceEqual(h2))
                     {
@@ -127,7 +136,7 @@ public class Test
             sw.Restart();
             for (int j = 0; j < i; ++j)
             {
-                hash.HashV01(Encoding.UTF8.GetBytes(lines[j]));
+                ComputeHash(Encoding.UTF8.GetBytes(lines[j]));
             }
             sw.Stop();
             var time1 = sw.ElapsedMilliseconds;
@@ -135,7 +144,7 @@ public class Test
             sw.Restart();
             for (int j = 0; j < i; ++j)
             {
-                hash.HashV01(Encoding.UTF8.GetBytes(lines[j]));
+                ComputeHash(Encoding.UTF8.GetBytes(lines[j]));
             }
             sw.Stop();
             var time2 = sw.ElapsedMilliseconds;
@@ -143,7 +152,7 @@ public class Test
             sw.Restart();
             for (int j = 0; j < i; ++j)
             {
-                hash.HashV01(Encoding.UTF8.GetBytes(lines[j]));
+                ComputeHash(Encoding.UTF8.GetBytes(lines[j]));
             }
             sw.Stop();
             var time3 = sw.ElapsedMilliseconds;
@@ -165,18 +174,16 @@ public class Test
             foreach (var line in File.ReadLines(file, Encoding.UTF8))
             {
                 var parts = line.Split(' ', 2);
-                foreach (var s in parts)
+                if (parts.Length != 2)
                 {
-                    var input = Encoding.UTF8.GetBytes(s);
-                    var h1 = hash.HashV01(input);
-                    var h2 = hash.HashV01(input);
-
-                    if (!h1.SequenceEqual(h2))
-                    {
-                        correct++;
-                    }
-                    testCount++;
+                    continue;
                 }
+                var h1 = ComputeHash(Encoding.UTF8.GetBytes(parts[0]));
+                var h2 = ComputeHash(Encoding.UTF8.GetBytes(parts[1]));
+
+                if (!h1.SequenceEqual(h2))
+                    correct++;
+                testCount++;
             }
         }
 
@@ -196,31 +203,42 @@ public class Test
             foreach (var line in File.ReadLines(file, Encoding.UTF8))
             {
                 var parts = line.Split(' ', 2);
-                foreach (var s in parts)
+                if (parts.Length != 2)
                 {
-                    var input = Encoding.UTF8.GetBytes(s);
-                    var h1 = hash.HashV01(input);
-                    var h2 = hash.HashV01(input);
-
-                    
-                    var bitDiff = comparer.BitDifference(h1, h2);
-                    minDiffBit = Math.Min(minDiffBit, bitDiff);
-                    maxDiffBit = Math.Max(maxDiffBit, bitDiff);
-                    sumDiffBit += bitDiff;
-                    
-                    string hex1 = converter.BytesToHex(h1);
-                    string hex2 = converter.BytesToHex(h2);
-
-                    int hexDiff = comparer.HexDifference(hex1, hex2);
-                    minDiffHex = Math.Min(minDiffHex, hexDiff);
-                    maxDiffHex = Math.Max(maxDiffHex, hexDiff);
-                    sumDiffHex += hexDiff;
-
-                    lineCount++;
+                    continue;
                 }
+                var h1 = ComputeHash(Encoding.UTF8.GetBytes(parts[0]));
+                var h2 = ComputeHash(Encoding.UTF8.GetBytes(parts[1]));
+
+
+                var bitDiff = comparer.BitDifference(h1, h2);
+                //TODO remove
+                if (bitDiff < 42)
+                {
+                    Console.WriteLine("====");
+                    Console.WriteLine(parts[0]);
+                    Console.WriteLine(parts[1]);
+
+                    Console.WriteLine(Encoding.UTF8.GetString(h1));
+                    Console.WriteLine(Encoding.UTF8.GetString(h2));
+                    
+                }
+                minDiffBit = Math.Min(minDiffBit, bitDiff);
+                maxDiffBit = Math.Max(maxDiffBit, bitDiff);
+                sumDiffBit += bitDiff;
+
+                string hex1 = converter.BytesToHex(h1);
+                string hex2 = converter.BytesToHex(h2);
+
+                int hexDiff = comparer.HexDifference(hex1, hex2);
+                minDiffHex = Math.Min(minDiffHex, hexDiff);
+                maxDiffHex = Math.Max(maxDiffHex, hexDiff);
+                sumDiffHex += hexDiff;
+
+                lineCount++;
             }
         }
-
+        Console.WriteLine(lineCount);
         if (lineCount == 0) return (0, 0, 0, 0, 0, 0);
 
         // Convert to percentages
