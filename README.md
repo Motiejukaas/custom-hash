@@ -5,9 +5,9 @@ This project provides a command-line tool for computing hashes using built-in an
 ## Features
 
 - Supports multiple hash algorithms:
-  - `hashv01` – Custom hash implementation version 01.
-  - `sha256` – Standard SHA-256.
-  - `md5` – Standard MD5.
+  - `hashv01` - Custom hash implementation version 01.
+  - `sha256` - Standard SHA-256.
+  - `md5` - Standard MD5.
 - Can hash either:
   - A text string provided via command line.
   - The contents of a file located in the `Data` folder.
@@ -38,9 +38,9 @@ Arguments:
 
 ### Available Hash Algorithms
 
-- `hashv01` – Custom Hash version 01.
-- `sha256` – Standard SHA-256.
-- `md5` – Standard MD5.
+- `hashv01` - Custom Hash version 01.
+- `sha256` - Standard SHA-256.
+- `md5` - Standard MD5.
 
 ### Examples
 
@@ -79,7 +79,7 @@ This document aggregates the results of automated hash function tests performed 
 
 **Note on Collisions for Hashv0.1:**  
 The collision testing suggested by the lecturer is not exhaustive as it only checks for collisions between random strings.  
-My current implementation produces **no collisions for text input ≤ 256 bits** (as far as I can tell), but **any input longer than 256 bits is truncated**, leading to inevitable collisions in practice.
+My current implementation produces **no collisions for text input <= 256 bits** (as far as I can tell), but **any input longer than 256 bits is truncated**, leading to inevitable collisions in practice.
 This is apparent in the avalanche testing (min values at 0% and overall average very low).
 
 ## Speed results
