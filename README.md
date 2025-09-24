@@ -33,7 +33,7 @@ Usage: dotnet run <hash_algorithm> [input] [--test]
 Arguments:
 <hash_algorithm> Name of the hash algorithm to use.
 [input] Optional. Text string or path to a file in the Data folder to hash.
---test Optional. Run the automated test suite.
+[--test] Optional. Run the automated test suite.
 ```
 
 ### Available Hash Algorithms
