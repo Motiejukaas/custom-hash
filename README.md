@@ -72,9 +72,11 @@ This document aggregates the results of automated hash function tests performed 
 | Algorithm     | Fixed Length | Determinism | Collision Accuracy | Avalanche (Bits) Min | Max   | Avg   | Avalanche (Hex) Min | Max   | Avg   |
 |---------------|--------------|-------------|--------------------|-----------------------|-------|-------|----------------------|-------|-------|
 | **SHA-256**   | 100%         | 100%        | 100%               | 37.11%               | 63.67%| 50.01%| 78.13%              | 100%  | 93.75%|
+| **SHA-1**     | 100%         | 100%        | 100%               | 33.13%               | 66.88%| 50.01%| 70.00%              | 100%  | 93.76%|
 | **MD5**       | 100%         | 100%        | 100%               | 30.47%               | 74.22%| 50.01%| 71.88%              | 100%  | 93.74%|
 | **Hash v0.1** | 100%         | 100%        | 100% *(misleading)*| 0%                   | 54.69%| 1.76% | 0%                  | 98.44%| 3.41% |
 | **Hash v0.2** | *TBD*        | *TBD*       | *TBD*              | *TBD*                | *TBD* | *TBD* | *TBD*               | *TBD* | *TBD* |
+
 ---
 
 **Note on Collisions for Hashv0.1:**  
