@@ -70,12 +70,13 @@ This document aggregates the results of automated hash function tests performed 
 ## Summary Table
 
 | Algorithm     | Fixed Length | Determinism | Collision Accuracy | Avalanche (Bits) Min | Max   | Avg   | Avalanche (Hex) Min | Max   | Avg   |
-|---------------|--------------|-------------|--------------------|-----------------------|-------|-------|----------------------|-------|-------|
+|---------------|--------------|-------------|--------------------|----------------------|-------|-------|---------------------|-------|-------|
 | **SHA-256**   | 100%         | 100%        | 100%               | 37.11%               | 63.67%| 50.01%| 78.13%              | 100%  | 93.75%|
 | **SHA-1**     | 100%         | 100%        | 100%               | 33.13%               | 66.88%| 50.01%| 70.00%              | 100%  | 93.76%|
 | **MD5**       | 100%         | 100%        | 100%               | 30.47%               | 74.22%| 50.01%| 71.88%              | 100%  | 93.74%|
 | **Hash v0.1** | 100%         | 100%        | 100% *(misleading)*| 0%                   | 54.69%| 1.76% | 0%                  | 98.44%| 3.41% |
-| **Hash v0.2** | *TBD*        | *TBD*       | *TBD*              | *TBD*                | *TBD* | *TBD* | *TBD*               | *TBD* | *TBD* |
+| **Hash v0.2** | 100%         | 100%        | 100%               | 0.39%                | 59.38%| 10.50%| 1.56%               | 100%  | 21.49%|
+| **Hash v0.3** | 100%         | 100%        | 100%               | 0.39%                | 61.72%| 12.20%| 1.56%               | 100%  | 23.10%|
 
 ---
 
@@ -85,6 +86,10 @@ My current implementation produces **no collisions for text input <= 256 bits** 
 This is apparent in the avalanche testing (min values at 0% and overall average very low).
 
 ## Speed results
+
+<img width="376" height="226" alt="image" src="https://github.com/user-attachments/assets/c19653cc-cd18-497a-a013-6c096367515d" />
+<img width="376" height="226" alt="image" src="https://github.com/user-attachments/assets/7b0ea129-75c8-4335-96ab-ccaa88dfcdaf" />
+
 
 ### SHA256
 <img width="376" height="226" alt="image" src="https://github.com/user-attachments/assets/0f60b82d-24a6-43ab-8454-1ea1c0b93703" />
