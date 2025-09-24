@@ -20,6 +20,30 @@ internal class Program
             {
                 throw new ArgumentException("Please provide the hash name!");
             }
+
+            if (args[0] == "--help" || args[0] == "-h" || args[0] == "/?")
+            {
+                Console.WriteLine("Usage: dotnet run <hash_algorithm> [input] [--test]");
+                Console.WriteLine();
+                Console.WriteLine("Arguments:");
+                Console.WriteLine("  <hash_algorithm>  Name of the hash algorithm to use.");
+                Console.WriteLine("  [input]           Optional. Text string or path to a file to hash.");
+                Console.WriteLine("  --test            Optional. Run the automated test suite.");
+                Console.WriteLine("                    When using --test, no input string or file is required.");
+                Console.WriteLine();
+                Console.WriteLine("Available hash algorithms:");
+                Console.WriteLine("  hashv01  - Custom Hash version 01");
+                Console.WriteLine("  hashv02  - Custom Hash version 02");
+                Console.WriteLine("  sha256   - Standard SHA-256");
+                Console.WriteLine("  md5      - Standard MD5");
+                Console.WriteLine();
+                Console.WriteLine("Examples:");
+                Console.WriteLine("  dotnet run sha256 \"Hello World\"");
+                Console.WriteLine("  dotnet run hashv01 input.txt");
+                Console.WriteLine("  dotnet run md5 --test   # Runs automated tests, no input needed");
+                return;
+            }
+
             
             string algoName = args[0].ToLower();
 
@@ -48,17 +72,25 @@ internal class Program
             if (args.Length >= 2)
             {
                 string secondArg = args[1];
-                if (File.Exists(secondArg))
+                
+                string exeDir = AppContext.BaseDirectory;
+                string projectDir = Directory.GetParent(exeDir)
+                    .Parent
+                    .Parent
+                    .Parent
+                    .FullName;
+                string inputDir = Path.Combine(projectDir, "Data", secondArg);
+                if (File.Exists(inputDir))
                 {
                     // Read file as bytes
-                    inputBytes = File.ReadAllBytes(secondArg);
+                    inputBytes = File.ReadAllBytes(inputDir);
                     Console.WriteLine($"[INFO] Read file: {secondArg} ({inputBytes.Length} bytes)");
                 }
                 else
                 {
                     // Treat the arg as direct input text
                     inputString = secondArg;
-                    Console.WriteLine("[INFO] Using command-line string input.");
+                    Console.WriteLine("[INFO] Command-line string input.");
                 }
             }
             else
@@ -73,13 +105,41 @@ internal class Program
                 inputBytes = Encoding.UTF8.GetBytes(inputString);
             }
 
-            Console.WriteLine(Encoding.UTF8.GetString(inputBytes));
+            // Print raw input
+            Console.WriteLine();
+            Console.WriteLine("=== Input Bytes ===");
+            Console.WriteLine("Decimal : " + string.Join(", ", inputBytes));
+            Console.WriteLine("Hex     : " + BitConverter.ToString(inputBytes));
+
+            try
+            {
+                string asString = Encoding.UTF8.GetString(inputBytes);
+                Console.WriteLine("String  : " + asString);
+            }
+            catch
+            {
+                Console.WriteLine("String  : [unprintable UTF-8 data]");
+            }
+            Console.WriteLine();
+
             Converter converter = new Converter();
 
-            string hex = converter.BytesToHex(hashFunc(inputBytes));
+            var hash = hashFunc(inputBytes);
             Console.WriteLine();
-            Console.WriteLine("Hash1 (256-bit, 64 hex chars):");
-            Console.WriteLine(hex);
+            Console.WriteLine($"=== {algoName} ===");
+            Console.WriteLine("Decimal : " + string.Join(", ", hash));
+            Console.WriteLine("Hex     : " + BitConverter.ToString(hash));
+
+            try
+            {
+                string asString = Encoding.UTF8.GetString(hash);
+                Console.WriteLine("String  : " + asString);
+            }
+            catch
+            {
+                Console.WriteLine("String  : [unprintable UTF-8 data]");
+            }
+            Console.WriteLine(converter.BytesToHex(hash));
         }
         catch (Exception ex)
         {

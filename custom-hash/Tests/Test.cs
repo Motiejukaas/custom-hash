@@ -204,6 +204,7 @@ public class Test
 
                 var bitDiff = comparer.BitDifference(h1, h2);
                 //TODO remove
+                /*
                 if (bitDiff < 42)
                 {
                     Console.WriteLine("====");
@@ -213,7 +214,7 @@ public class Test
                     Console.WriteLine(Encoding.UTF8.GetString(h1));
                     Console.WriteLine(Encoding.UTF8.GetString(h2));
                     
-                }
+                }*/
                 minDiffBit = Math.Min(minDiffBit, bitDiff);
                 maxDiffBit = Math.Max(maxDiffBit, bitDiff);
                 sumDiffBit += bitDiff;
@@ -249,10 +250,10 @@ public class Test
         Directory.CreateDirectory(OutputDir);
         string csvPath = Path.Combine(OutputDir, "HashSpeed.csv");
         using var writer = new StreamWriter(csvPath, false);
-        writer.WriteLine("Lines;AvgTime_μs"); // header
+        writer.WriteLine("Lines,AvgTime_us"); // header
         foreach (var result in speedResults)
         {
-            writer.WriteLine($"{result.lines};{result.avgTimeUs:F3}");
+            writer.WriteLine($"{result.lines},{result.avgTimeUs:F3}");
         }
         return csvPath;
     }

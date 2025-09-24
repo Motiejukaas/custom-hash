@@ -4,6 +4,11 @@ public class Comparer
 {
     public int BitDifference(byte[] a, byte[] b)
     {
+        if (a.Length != b.Length)
+        {
+            throw new ArgumentException("Byte arrays must have the same length.");
+        }
+
         int diff = 0;
         for (int i = 0; i < a.Length && i < b.Length; i++)
         {
