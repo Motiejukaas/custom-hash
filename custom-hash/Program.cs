@@ -35,6 +35,7 @@ internal class Program
                 Console.WriteLine("  hashv01  - Custom Hash version 01");
                 Console.WriteLine("  hashv02  - Custom Hash version 02");
                 Console.WriteLine("  sha256   - Standard SHA-256");
+                Console.WriteLine("  sha1   - Standard SHA-1");
                 Console.WriteLine("  md5      - Standard MD5");
                 Console.WriteLine();
                 Console.WriteLine("Examples:");
@@ -52,6 +53,7 @@ internal class Program
                 "hashv01" => new Hash.Hash().HashV01,
                 "hashv02" => new Hash.Hash().HashV02,
                 "sha256" => System.Security.Cryptography.SHA256.Create().ComputeHash,
+                "sha1" => System.Security.Cryptography.SHA1.Create().ComputeHash,
                 "md5" => System.Security.Cryptography.MD5.Create().ComputeHash,
                 _ => throw new ArgumentException($"Unknown algorithm: {algoName}")
             };
