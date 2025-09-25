@@ -32,8 +32,11 @@ internal class Program
                 Console.WriteLine("                    When using --test, no input string or file is required.");
                 Console.WriteLine();
                 Console.WriteLine("Available hash algorithms:");
-                Console.WriteLine("  hashv01  - Custom Hash version 01");
-                Console.WriteLine("  hashv02  - Custom Hash version 02");
+                Console.WriteLine("  hashv0.1  - Custom Hash version 01");
+                Console.WriteLine("  hashv0.2  - Custom Hash version 02");
+                Console.WriteLine("  hashv0.3  - Custom Hash version 02");
+                Console.WriteLine("  hashv1.0  - Custom Hash version 02");
+                Console.WriteLine("  hashv1.1  - Custom Hash version 02");
                 Console.WriteLine("  sha256   - Standard SHA-256");
                 Console.WriteLine("  sha1   - Standard SHA-1");
                 Console.WriteLine("  md5      - Standard MD5");
@@ -54,6 +57,7 @@ internal class Program
                 "hashv0.2" => new Hash.Hash().HashV02,
                 "hashv0.3" => new Hash.Hash().HashV03,
                 "hashv1.0" => new Hash.Hash().HashV10,
+                "hashv1.1" => new Hash.Hash().HashV11,
                 "sha256" => System.Security.Cryptography.SHA256.Create().ComputeHash,
                 "sha1" => System.Security.Cryptography.SHA1.Create().ComputeHash,
                 "md5" => System.Security.Cryptography.MD5.Create().ComputeHash,
