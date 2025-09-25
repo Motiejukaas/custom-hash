@@ -50,9 +50,10 @@ internal class Program
 
             Func<byte[], byte[]> hashFunc = algoName switch
             {
-                "hashv01" => new Hash.Hash().HashV01,
-                "hashv02" => new Hash.Hash().HashV02,
-                "hashv03" => new Hash.Hash().HashV03,
+                "hashv0.1" => new Hash.Hash().HashV01,
+                "hashv0.2" => new Hash.Hash().HashV02,
+                "hashv0.3" => new Hash.Hash().HashV03,
+                "hashv1.0" => new Hash.Hash().HashV10,
                 "sha256" => System.Security.Cryptography.SHA256.Create().ComputeHash,
                 "sha1" => System.Security.Cryptography.SHA1.Create().ComputeHash,
                 "md5" => System.Security.Cryptography.MD5.Create().ComputeHash,
