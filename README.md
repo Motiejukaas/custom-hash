@@ -77,6 +77,8 @@ This document aggregates the results of automated hash function tests performed 
 | **Hash v0.1** | 100%         | 100%        | 100% *(misleading)*| 0%                   | 54.69%| 1.76% | 0%                  | 98.44%| 3.41% |
 | **Hash v0.2** | 100%         | 100%        | 100%               | 0.39%                | 59.38%| 10.50%| 1.56%               | 100%  | 21.49%|
 | **Hash v0.3** | 100%         | 100%        | 100%               | 0.39%                | 61.72%| 12.20%| 1.56%               | 100%  | 23.10%|
+| **Hash v1.0** | 100%         | 100%        | 100%               | 0.39%                | 65.63%| 32.67%| 1.56%               | 100%  | 61.3% |
+| **Hash v1.1** | 100%         | 100%        | 100%               | 36.33%               | 65.62%| 49.99%| 76.56%              | 100%  | 93.74%|
 
 ---
 
@@ -87,9 +89,7 @@ This is apparent in the avalanche testing (min values at 0% and overall average 
 
 ## Speed results
 
-<img width="376" height="226" alt="image" src="https://github.com/user-attachments/assets/c19653cc-cd18-497a-a013-6c096367515d" />
-<img width="376" height="226" alt="image" src="https://github.com/user-attachments/assets/7b0ea129-75c8-4335-96ab-ccaa88dfcdaf" />
-
+<img width="1068" height="629" alt="image" src="https://github.com/user-attachments/assets/c7d2d0cf-8482-43ee-9e2f-b79040c3c3b3" />
 
 ### SHA256
 <img width="376" height="226" alt="image" src="https://github.com/user-attachments/assets/0f60b82d-24a6-43ab-8454-1ea1c0b93703" />
