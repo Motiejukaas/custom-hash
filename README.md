@@ -5,8 +5,13 @@ This project provides a command-line tool for computing hashes using built-in an
 ## Features
 
 - Supports multiple hash algorithms:
-  - `hashv01` - Custom hash implementation version 01.
+  - `hashv0.1` - Custom hash implementation version 0.1.
+  - `hashv0.2` - Custom hash implementation version 0.2.
+  - `hashv0.3` - Custom hash implementation version 0.3.
+  - `hashv1.0` - Custom hash implementation version 1.0.
+  - `hashv1.1` - Custom hash implementation version 1.1.
   - `sha256` - Standard SHA-256.
+  - `sha1` - Standard SHA-1.
   - `md5` - Standard MD5.
 - Can hash either:
   - A text string provided via command line.
@@ -38,9 +43,14 @@ Arguments:
 
 ### Available Hash Algorithms
 
-- `hashv01` - Custom Hash version 01.
-- `sha256` - Standard SHA-256.
-- `md5` - Standard MD5.
+- hashv0.1  - Custom Hash version 0.1
+- hashv0.2  - Custom Hash version 0.2
+- hashv0.3  - Custom Hash version 0.3
+- hashv1.0  - Custom Hash version 1.0
+- hashv1.1  - Custom Hash version 1.1
+- sha256    - Standard SHA-256  
+- sha1      - Standard SHA-1      
+- md5       - Standard MD5        
 
 ### Examples
 
